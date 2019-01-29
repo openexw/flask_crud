@@ -20,10 +20,10 @@ $ git clone git@github.com:openexw/flask_crud.git
 # 进入项目目录
 $ cd flask_crud
 
-# 安装
+# 安装虚拟环境，并安装 Pipfile 中的所有依赖
 $ pipenv install
 
-# 启动
+# 启动虚拟环境
 $ pipenv shell
 ```
 
