@@ -1,8 +1,20 @@
 # 环境准备
 
+> 作者环境：
+> + 操作系统： win10
+> + Python： Python 3.7.1
+> + Ide：PyCharm
+> + 数据库：MySQL
+> + 第三方库：
+>   + Flask
+>   + Flask-login
+>   + Flask-sqlalchemy
+>   + cymysql
+>   + wtforms
+
 ## 安装虚拟环境
 
-虚拟环境的好处，项目跟你之前的环境完全隔离，这是一个全新的环境，一切都是从 0 开始。
+虚拟环境的好处，项目跟你之前的环境完全隔离，这是一个全新的环境，一切都是 0 开始。
 
 ```bash
 $ pip install pipenv
