@@ -1,7 +1,9 @@
 """
 Created by 简单7月 on 2019/1/28
 """
-from flask import render_template, request, redirect, url_for, flash
+import json
+
+from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user
 
 from app.models.Base import db
@@ -11,6 +13,30 @@ from . import web
 
 __author__ = '简单7月'
 
+@web.route('/profile', methods=['GET'])
+def profile():
+    """
+        sfdsfs
+    """
+    # return render_template('auth/profile.html')
+    # print(121212)
+    # count = User.query.count()
+    count = User.query.all()
+
+    # user = [
+    #     {
+    #         'id': 1,
+    #         "name": 'jack'
+    #     },
+    #     {
+    #         'id': 2,
+    #         "name": 'June'
+    #     }
+    # ]
+    # 查询有多少个人 -> 数据库查
+    # count = len(user)
+    # count = count + 100
+    return jsonify({"status":0, "data": {"count": json.dump(count)}})
 
 @web.route('/register', methods=['GET', 'POST'])
 def register():
@@ -22,10 +48,15 @@ def register():
     form = UserRegisterForm(request.form)
     # POST方式提交并验证
     if request.method == "POST" and form.validate():
+        # 用户模型
         user = User()
+        # 将表单提交的数据设置到模型
         user.set_attrs(form.data)
+        # 添加 session
         db.session.add(user)
+        # 提交session
         db.session.commit()
+        # 重定向到 /login 页面
         return redirect(url_for('web.login'))
 
     # 返回视图文件，templates/auth/register.html
@@ -38,6 +69,7 @@ def login():
     用户登录
     :return:
     """
+    # 用户登录表单验证
     form = UserLoginForm(request.form)
     if request.method == "POST" and form.validate():
         user = User.query.filter_by(email=form.email.data).first()

@@ -19,7 +19,7 @@ class User(UserMixin, Base):
     nickname = Column(String(24), nullable=False)
     mobile = Column(String(18), unique=True)
     email = Column(String(50), unique=True, nullable=False)
-    # password 为 表字段 的名字，实则为了解决赋值时直接将 password 赋值给模型（password字段不存在，所以无法赋值）
+    # password 为 表字段 的名字，实则为了解决赋值时直接将 password 赋值给模型（password字段不存在，所以无法赋值）,为了加密
     _password = Column('password', String(100), nullable=True)
 
     @property

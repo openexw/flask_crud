@@ -13,4 +13,4 @@ debug = app.config['DEBUG']
 
 # print(debug)
 if __name__ == "__main__":
-    app.run(debug=debug, host='0.0.0.0', port=8001)
+    app.run(debug=debug, host='0.0.0.0', port=8002)
