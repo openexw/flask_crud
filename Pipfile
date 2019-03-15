@@ -7,10 +7,11 @@ verify_ssl = true
 
 [packages]
 flask-sqlalchemy = "*"
-cymysql = "*"
 flask-login = "*"
 wtforms = "*"
 flask = "*"
+crypto = "*"
+cymysql = "==0.9.13"
 
 [requires]
 python_version = "3.7"

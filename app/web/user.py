@@ -13,6 +13,7 @@ from . import web
 
 __author__ = '简单7月'
 
+
 @web.route('/profile', methods=['GET'])
 def profile():
     """
@@ -21,22 +22,11 @@ def profile():
     # return render_template('auth/profile.html')
     # print(121212)
     # count = User.query.count()
-    count = User.query.all()
+    users = User.query.all()
+    resp = {'code': 200, 'msg': '操作成功~', 'data': {}}
+    resp['data'] = users
+    return jsonify(resp)
 
-    # user = [
-    #     {
-    #         'id': 1,
-    #         "name": 'jack'
-    #     },
-    #     {
-    #         'id': 2,
-    #         "name": 'June'
-    #     }
-    # ]
-    # 查询有多少个人 -> 数据库查
-    # count = len(user)
-    # count = count + 100
-    return jsonify({"status":0, "data": {"count": json.dump(count)}})
 
 @web.route('/register', methods=['GET', 'POST'])
 def register():

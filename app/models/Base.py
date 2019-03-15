@@ -32,3 +32,5 @@ class Base(db.Model):
             if hasattr(self, k) and k != 'id':
                 setattr(self, k, v)
 
+    def __getitem__(self, item):
+        return getattr(self, item)
