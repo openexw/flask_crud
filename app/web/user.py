@@ -1,9 +1,7 @@
 """
 Created by 简单7月 on 2019/1/28
 """
-import json
-
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user
 
 from app.models.Base import db
@@ -13,20 +11,14 @@ from . import web
 
 __author__ = '简单7月'
 
-
 @web.route('/profile', methods=['GET'])
 def profile():
     """
         sfdsfs
     """
-    # return render_template('auth/profile.html')
+    return render_template('auth/profile.html')
     # print(121212)
-    # count = User.query.count()
-    users = User.query.all()
-    resp = {'code': 200, 'msg': '操作成功~', 'data': {}}
-    resp['data'] = users
-    return jsonify(resp)
-
+    pass
 
 @web.route('/register', methods=['GET', 'POST'])
 def register():
@@ -36,7 +28,7 @@ def register():
     """
     # 验证
     form = UserRegisterForm(request.form)
-    # POST方式提交并验证
+    # POST方式提交并验证 &&
     if request.method == "POST" and form.validate():
         # 用户模型
         user = User()

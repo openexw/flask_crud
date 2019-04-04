@@ -1,10 +1,7 @@
 """
 Created by 简单7月 on 2019/1/28
 """
-from datetime import date
-
-from flask import Flask as _Flask
-from flask.json import JSONEncoder as _JSONEncoder
+from flask import Flask
 from flask_login import LoginManager
 
 from app.models.Base import db
@@ -12,26 +9,6 @@ from app.models.Base import db
 __author__ = '简单7月'
 
 login_manager = LoginManager()
-
-
-class JSONEncoder(_JSONEncoder):
-    # 重写 Flask 下的 JSONEncoder 下的 default
-    def default(self, o):
-        """
-        # 对象转换字典
-        1. __dict__
-        2. dict
-        """
-        if hasattr(o, 'keys') and hasattr(o, '__getitem__'):
-            return dict(o)
-        if isinstance(o, date):
-            return o.strftime('%Y-%m-%d')
-
-
-class Flask(_Flask):
-    # 让 Flask 执行我们自定义的 JSONEncoder
-    json_encoder = JSONEncoder
-
 
 def create_app():
     """

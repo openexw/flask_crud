@@ -1,9 +1,9 @@
 """
-Created by 简单7月 on 2019/1/28
+Created by ranml on 2019/1/28
 """
 from app import create_app
 
-__author__ = '简单7月'
+__author__ = 'ranml'
 
 # 创建 app ，定义在 app/__init__.py
 app = create_app()

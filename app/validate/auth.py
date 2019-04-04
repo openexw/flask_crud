@@ -1,12 +1,12 @@
 """
-Created by 简单7月 on 2019/1/29
+Created by ranml on 2019/1/29
 """
 from wtforms import StringField, Form, PasswordField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 
 from app.models.User import User
 
-__author__ = '简单7月'
+__author__ = 'ranml'
 
 
 class UserLoginForm(Form):

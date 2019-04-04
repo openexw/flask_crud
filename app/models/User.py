@@ -1,5 +1,5 @@
 """
-Created by 简单7月 on 2019/1/28
+Created by ranml on 2019/1/28
 """
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String
@@ -8,7 +8,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from app import login_manager
 from app.models.Base import Base
 
-__author__ = '简单7月'
+__author__ = 'ranml'
 
 
 class User(UserMixin, Base):
@@ -21,9 +21,6 @@ class User(UserMixin, Base):
     email = Column(String(50), unique=True, nullable=False)
     # password 为 表字段 的名字，实则为了解决赋值时直接将 password 赋值给模型（password字段不存在，所以无法赋值）,为了加密
     _password = Column('password', String(100), nullable=True)
-
-    def keys(self):
-        return ['id', 'nickname', 'mobile', 'created_at', 'updated_at', 'status']
 
     @property
     def password(self):
