@@ -96,9 +96,16 @@
 {% block script %}
 <script src="http://api.map.baidu.com/api?v=2.0&ak=in6XhrBGd3XdVIAuh4NoXP0liZi42Lum"></script>
 <script type="text/javascript">
+    $(function(){
+        // 程序开始执行
+        createMap();    // 创建地图
+        selectCity();  // 选择城市
+    });
 
-    // tab switch
-    var myclick = function(v) {
+    /**
+     *  tab switch
+     */
+    function myclick(v) {
         var llis = document.getElementsByTagName("li");
         for(var i = 0; i < llis.length; i++) {
             var lli = llis[i];
@@ -118,7 +125,6 @@
             }
         }
     }
-
     /**
         创建地图
     */
@@ -128,7 +134,14 @@
         // 创建地图实例  
         var point = new BMap.Point(116.404, 39.915);
         map.centerAndZoom(point, 15);
+        map.addControl(new BMap.NavigationControl());
         // 根据 IP 定位到当前城市
+        setCurrentCityByIP();  
+    }
+    
+
+    // 根据 IP 设置当前城市
+    function setCurrentCityByIP(){
         let city = new BMap.LocalCity();
         city.get(function(e) {
             let cityName = e.name;
@@ -137,12 +150,7 @@
             // 设置地图中心为当前城市
             map.setCenter(cityName);
         });
-        // map.centerAndZoom('德阳', 15);
-        // 创建点坐标  
-        // var map = new BMap.Map("allmap");  // 创建Map实例
-        // map.centerAndZoom("四川",15);      // 初始化地图,用城市名设置地图中心点   
     }
-    
     // 给导航栏添加点击事件，并切换地图
     function selectCity() {
         $('#location .model>.rml-city-btn').click(function(e){
@@ -155,10 +163,35 @@
             $('#location .model').hide();
             // 数据变化
             map.centerAndZoom(city, 15);
+            // 设置区域轮廓
+            // getBoundary(city);
 
         });
     }   
-    createMap();
-    selectCity();     
+
+    // 设置轮廓图
+    function getBoundary (city) {
+        let boundary = new BMap.Boundary();
+        boundary.get(city, function(rs){
+            console.log(rs);
+            let bounds;
+            let maxNum = -1, maxPly;
+            let count = rs.boundaries.length; 
+            for(let i = 0; i < count; i++){
+                let ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#ff0000"});
+                map.addOverlay(ply);  
+                
+                let arr = ply.getBounds();
+                if (arr.length > maxNum) {
+                    maxNum = arr.length;
+                    maxPly = ply
+                }
+            }
+
+            if(maxPly){
+                map.setViewport(maxPly.getPoints());
+            }
+        });
+    }   
 </script>
 {% endblock %}
