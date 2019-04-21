@@ -16,7 +16,7 @@
     <style>
 {#        这个 css  不要移动到app.css 中#}
         body {
-             background-image: url('{{ url_for('static', filename='123.jpg') }}');
+            background-image: url('{{ url_for('static', filename='123.jpg') }}');
             background-size: cover;
             background-repeat: no-repeat;
             height: 100%;
@@ -40,7 +40,16 @@
     </style>
 </head>
 <body>
+    <header class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">区域经济数据可视化分析</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
+        </nav>
+    </header>
 <div class='container login-container'>
     <div class="row">
         {% with messages = get_flashed_messages() %}
