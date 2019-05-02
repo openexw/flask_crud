@@ -1,9 +1,10 @@
 {% extends 'base_full.html' %}
 
 {% block title %}
-<title>区域经济可视化</title>
+<title>区域经济数据分析可视化系统设计</title>
 {% endblock %}
-
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/baidu-ui.css') }}">
 <!-- css start -->
 {% block css %}
 <style>
@@ -14,6 +15,7 @@
     table{
         height: 100%;
         width: 100%;
+
     }
     #content {
         width: 100%;
@@ -57,17 +59,21 @@
 
 {% block content %}
 <table border="1" cellspacing=0 cellpadding=0>
-    <tr style="height:80%;background-color: white">
-        <td style="width:60%;color: green">
-            <div id="allmap"></div>
-            <!--<ul  style="list-style:none;line-height: 100px">
-                <li><a href="http://www.baidu.com" target="myframe"><img src="img/bd.gif"></a></li>
-                <li><a href="https://www.ifeng.com/" target="myframe"><img src="img/fh.gif"></a></li>
-                <li><a href="http://www.taobao.com" target="myframe"><img src="img/tb.gif"></a></li>
-                <li><a href="https://www.sina.com.cn/" target="myframe"><img src="img/xl.gif"></a></li>
-                <li><a href="http://www.51zxw.com" target="myframe"><img src="img/我要自学网.png"></a></li>
-            </ul>-->
-
+    <tr style="height:100%;background-color: white">
+        <td style="width:50%;color: green">
+            <div id="allmap">
+                <div class="economic">
+                    <span class="rml-city-btn active">GDP</span>
+                    <span class="rml-city-btn">第一产业</span>
+                    <span class="rml-city-btn">第二产业</span>
+                    <span class="rml-city-btn">第三产业</span>
+                    <span class="rml-city-btn">固定资产投资总额</span>
+                    <span class="rml-city-btn">第一产业投资</span>
+                    <span class="rml-city-btn">第二产业投资</span>
+                    <span class="rml-city-btn">第三产业投资</span>
+                    <span class="rml-city-btn">社会消费品零售总额</span>
+                </div>
+            </div>
         </td>
         <td colspan="2" style="width: 40%">
             <div id="content">
@@ -83,12 +89,44 @@
                 </div>
                 <div class="tab_css" id="tab1_content" style="display: block">
                     <div>
+                        <table align="center">
+                            <tr>
+                                <td>GDP</td>
+                                <td>单位：万元</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>7826.12</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>7826.12</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>7826.12</td>
+                            </tr><tr>
+                                <td>4</td>
+                                <td>7826.12</td>
+                            </tr>
+
+                        </table>
 
                     </div>
                 </div>
                 <div class="tab_css" id="tab2_content">
                     <div>
-                        YEMIANER
+                        <div class="tab2_p" id="tab2_p">
+                            <p>图表类型：</p>
+                        </div>
+                        <div class="tab2_select">
+                            <select>
+                              <option value ="volvo">折线图</option>
+                              <option value ="saab">散点图</option>
+                              <option value="opel">直方图</option>
+                              <option value="audi">曲线图</option>
+                            </select>
+                         </div>
                     </div>
                 </div>
             </div>
@@ -126,7 +164,7 @@
         创建地图
     */
     function createMap() {
-        // map 这的 map 使用的全局变量，是为了 selectCity() 中能够直接使用该 map
+            // map
         map = new BMap.Map("allmap");
         // 创建地图实例  
         var point = new BMap.Point(116.404, 39.915);
@@ -134,13 +172,17 @@
         // 根据 IP 定位到当前城市
         let city = new BMap.LocalCity();
         city.get(function(e) {
-            // 获取城市的名字
             let cityName = e.name;
             // 设置导航栏显示
             $('#location .text').text(cityName);
             // 设置地图中心为当前城市
             map.setCenter(cityName);
+            map.addEventListener('click', function(){
+                alert ('You clicked on the map');
+            });
+
         });
+
         // map.centerAndZoom('德阳', 15);
         // 创建点坐标  
         // var map = new BMap.Map("allmap");  // 创建Map实例
@@ -149,9 +191,7 @@
     
     // 给导航栏添加点击事件，并切换地图
     function selectCity() {
-        // 给城市添加点击事件
         $('#location .model>.rml-city-btn').click(function(e){
-            // 获取城市的名字
             let city = $(this).text();
 
             // 样式变化
@@ -159,7 +199,7 @@
             $(this).addClass('active');
             $('#location .text').text(city);
             $('#location .model').hide();
-            // 数据变化，根据city名字设置城市
+            // 数据变化
             map.centerAndZoom(city, 15);
 
         });
