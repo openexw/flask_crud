@@ -13,3 +13,5 @@ from app.web import user
 from app.web import index
 
 from app.web import news
+
+from app.web import economic
