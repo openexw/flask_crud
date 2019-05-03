@@ -30,6 +30,12 @@ class Economic(Base):
             del dict["_sa_instance_state"]
         return dict
 
+    def __getitem__(self, item):
+        return getattr(self, item)
+
+    def keys(self):
+        return ['id', 'name', 'sub_mame', 'city']
+
 
 class EconomicData(Base):
     """

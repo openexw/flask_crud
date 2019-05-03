@@ -1,7 +1,6 @@
 """
 Created by 简单7月 on 2019/1/28
 """
-import json
 
 from flask import jsonify
 
@@ -15,10 +14,17 @@ __author__ = '简单7月'
 from . import web
 
 
+class July:
+    name = 'July'
+    age = 12
+
+
 @web.route('/economic/test')
 def test():
+    july = July()
+    print(july.name)
+    return jsonify(July())
     # print('1212')
-    return 'sadsad'
 
 
 @web.route('/economic', methods=['get'])
@@ -27,16 +33,21 @@ def lists():
     获取一个列表
     :return:
     """
-    """
+
     
-    economics = Economic.query.all()
-    result = []
-    for economic in economics:
-        result.append(economic.to_json())
-    return jsonify(result), 200
-    """
-    economics = Economic.query().filter(Economic.data.any(EconomicData.economic_id==Economic.id)).all()
-    print(economics)
+    # economics = Economic.query.all()
+    # result = []
+    # for economic in economics:
+    #     result.append(economic.to_json())
+    # return jsonify(result), 200
+
+    # economics = Economic.query().filter(Economic.data.any(EconomicData.economic_id==Economic.id)).all()
+    # economics = Economic.query().filter(Economic.data.any(EconomicData.economic_id==Economic.id)).all()
+    # economics = Economic.query.all()
+    #
+    # print(economics)
+    #
+    # return jsonify(economics)
     # result = []
     # for economic in economics:
     #     result.append(economic.to_json())

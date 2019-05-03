@@ -1,14 +1,16 @@
 """
 Created by 简单7月 on 2019/1/28
 """
-from flask import Flask
+
 from flask_login import LoginManager
 
+from .app import Flask
 from app.models.Base import db
 
 __author__ = '简单7月'
 
 login_manager = LoginManager()
+
 
 def create_app():
     """
@@ -46,3 +48,5 @@ def register_blueprint(app):
     """
     from app.web import web
     app.register_blueprint(web)
+
+
