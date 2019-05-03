@@ -53,6 +53,12 @@
     #allmap {
         height: 100%;
     }
+    .economic {
+        display: none;
+    }
+    .economic span {
+        cursor: pointer;
+    }
 </style>
 {% endblock %}
 <!-- css end -->
@@ -61,19 +67,7 @@
 <table border="1" cellspacing=0 cellpadding=0>
     <tr style="height:100%;background-color: white">
         <td style="width:50%;color: green">
-            <div id="allmap">
-                <div class="economic">
-                    <span class="rml-city-btn active">GDP</span>
-                    <span class="rml-city-btn">第一产业</span>
-                    <span class="rml-city-btn">第二产业</span>
-                    <span class="rml-city-btn">第三产业</span>
-                    <span class="rml-city-btn">固定资产投资总额</span>
-                    <span class="rml-city-btn">第一产业投资</span>
-                    <span class="rml-city-btn">第二产业投资</span>
-                    <span class="rml-city-btn">第三产业投资</span>
-                    <span class="rml-city-btn">社会消费品零售总额</span>
-                </div>
-            </div>
+            <div id="allmap"></div>
         </td>
         <td colspan="2" style="width: 40%">
             <div id="content">
@@ -134,11 +128,25 @@
         </td>
     </tr>
 </table>
+<div class="economic">
+    <span class="rml-city-btn active">GDP</span>
+    <span class="rml-city-btn">第一产业</span>
+    <span class="rml-city-btn">第二产业</span>
+    <span class="rml-city-btn">第三产业</span>
+    <span class="rml-city-btn">固定资产投资总额</span>
+    <span class="rml-city-btn">第一产业投资</span>
+    <span class="rml-city-btn">第二产业投资</span>
+    <span class="rml-city-btn">第三产业投资</span>
+    <span class="rml-city-btn">社会消费品零售总额</span>
+</div>
+
+    <input type="hidden" name="type">
+    <input type="hidden" name="sub_type">
+    <input type="hidden" name="city">
 {% endblock %}
 {% block script %}
 <script src="http://api.map.baidu.com/api?v=2.0&ak=in6XhrBGd3XdVIAuh4NoXP0liZi42Lum"></script>
 <script type="text/javascript">
-
     // tab switch
     var myclick = function(v) {
         var llis = document.getElementsByTagName("li");
@@ -178,8 +186,9 @@
             $('#location .text').text(cityName);
             // 设置地图中心为当前城市
             map.setCenter(cityName);
+            $('input[name="city"]').val(cityName)
             map.addEventListener('click', function(){
-                alert ('You clicked on the map');
+                $('.economic').show()
             });
 
         });
@@ -194,7 +203,7 @@
     function selectCity() {
         $('#location .model>.rml-city-btn').click(function(e){
             let city = $(this).text();
-
+            $('input[name="city"]').val(city);
             // 样式变化
             $('#location .model>.rml-city-btn').removeClass('active');
             $(this).addClass('active');
@@ -204,7 +213,9 @@
             map.centerAndZoom(city, 15);
 
         });
-    }   
+    }
+    
+
     createMap();
     selectCity();     
 </script>

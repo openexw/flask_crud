@@ -2,10 +2,11 @@
 Created by 简单7月 on 2019/1/28
 """
 
-from flask import jsonify
+from flask import jsonify, request
 
 from app.models.Base import db
 from app.models.Data import Economic, EconomicData
+from app.validate.economic import EconomicValidate
 
 __author__ = '简单7月'
 
@@ -14,17 +15,24 @@ __author__ = '简单7月'
 from . import web
 
 
-class July:
-    name = 'July'
-    age = 12
-
-
-@web.route('/economic/test')
+@web.route('/economic/test',)
 def test():
-    july = July()
-    print(july.name)
-    return jsonify(July())
-    # print('1212')
+    form = request.args
+    if form.get('city') == None:
+        return jsonify({'data': [], 'code': 404, 'msg': '城市不能为空'})
+    else:
+
+        pass
+    # if form.validate():
+    #     economic = Economic.query.filter(city=form.city).get()
+    #     economic_data = economic.economic_data
+    # else:
+
+
+    # for data in economic_data:
+
+    pass
+
 
 
 @web.route('/economic', methods=['get'])

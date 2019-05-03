@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer,String,VARCHAR
+from sqlalchemy.orm import relationship, backref
 
 from app.models.Base import Base
 
-<<<<<<< HEAD
 __author__ = "简单7月"
 
 
@@ -19,7 +19,7 @@ class Economic(Base):
     sub_type = Column(SmallInteger, default=0, nullable=False, comment="子类型，如：type=1，sub_type=1，即为地区生产总值下的第一产业")
     sub_name = Column(String(50), default='', nullable=False, comment="子类型名字，如GDP、第一产业等")
     city = Column(String(20), default='', comment="城市名字")
-    data = relationship("EconomicData", backref=backref('economic', uselist=False))
+    data = relationship("EconomicData", backref=backref('economic_data', uselist=False))
 
     def to_json(self):
 
@@ -44,11 +44,3 @@ class EconomicData(Base):
     time = Column(Date, comment='时间，用于记录第几月份')
     is_quarter = Column(Boolean, default=0, comment='是否是季度数据，是-1，否-0')
     economic_id = Column(Integer, ForeignKey('economic.id'), comment='外键')
-
-
-=======
-class Data(Base):
-    id = Column(Integer(11), primary_key=True)
-    data_name = Column(VARCHAR(24), nullable=False)
-    data_unit = Column(VARCHAR(10),nullable=False)
->>>>>>> 34903ac6407de28afe52dffe593bb414afce59e1
