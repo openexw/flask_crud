@@ -1,10 +1,8 @@
-"""
-Created by 简单7月 on 2019-04-26
-"""
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, Integer,String,VARCHAR
 
 from app.models.Base import Base
 
+<<<<<<< HEAD
 __author__ = "简单7月"
 
 
@@ -48,3 +46,9 @@ class EconomicData(Base):
     economic_id = Column(Integer, ForeignKey('economic.id'), comment='外键')
 
 
+=======
+class Data(Base):
+    id = Column(Integer(11), primary_key=True)
+    data_name = Column(VARCHAR(24), nullable=False)
+    data_unit = Column(VARCHAR(10),nullable=False)
+>>>>>>> 34903ac6407de28afe52dffe593bb414afce59e1

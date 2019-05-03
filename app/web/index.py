@@ -10,5 +10,4 @@ __author__ = '简单7月'
 
 @web.route('/')
 def index():
-
     return render_template('index.html')
