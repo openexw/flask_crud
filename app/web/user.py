@@ -11,7 +11,6 @@ from . import web
 
 __author__ = '简单7月'
 
-
 @web.route('/profile', methods=['GET'])
 def profile():
     """
@@ -20,7 +19,6 @@ def profile():
     return render_template('auth/profile.html')
     # print(121212)
     pass
-
 
 @web.route('/register', methods=['GET', 'POST'])
 def register():
