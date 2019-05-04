@@ -178,7 +178,7 @@
     function createMap() {
             // map
         map = new BMap.Map("allmap");
-        // 创建地图实例  
+        // 创建地图实例
         var point = new BMap.Point(116.404, 39.915);
         map.centerAndZoom(point, 15);
         // 根据 IP 定位到当前城市
@@ -196,11 +196,11 @@
         });
 
         // map.centerAndZoom('德阳', 15);
-        // 创建点坐标  
+        // 创建点坐标
         // var map = new BMap.Map("allmap");  // 创建Map实例
-        // map.centerAndZoom("四川",15);      // 初始化地图,用城市名设置地图中心点   
+        // map.centerAndZoom("四川",15);      // 初始化地图,用城市名设置地图中心点
     }
-    
+
     // 给导航栏添加点击事件，并切换地图
     function selectCity() {
         $('#location .model>.rml-city-btn').click(function(e){
@@ -216,7 +216,7 @@
 
         });
     }
-    
+
 
     createMap();
     selectCity();
