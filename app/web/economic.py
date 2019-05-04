@@ -50,3 +50,9 @@ def lists():
         return jsonify(all_data)
     else:
         return jsonify({'data': [], 'code': 404, 'msg': '参数错误'})
+
+# @web.route('/cates', methods=['get'])
+# def cates():
+    # o = db.session.execute('select `name` from `economic` order by `type` asc group by `name`');
+    # data = o.fetchall()
+    # for d in data:
