@@ -12,7 +12,7 @@ class JSONEncoder(_JSONEncoder):
     def default(self, o):
         if hasattr(o, 'keys') and hasattr(o, '__getitem__'):
             return dict(o)
-        # return {'code': 400, 'data': [], 'msg': '没数据'}
+        return {'data': [], 'code': 404, 'msg': '没有数据'}
 
 
 class Flask(_Flask):

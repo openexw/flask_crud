@@ -1,25 +1,17 @@
 """
 Created by 简单7月 on 2019/1/28
 """
-from json import dumps
 
 from flask import jsonify, request
-from sqlalchemy import and_, text
+from sqlalchemy import text
 
 from app.models.Base import db
-from app.models.Data import Economic, EconomicData
-from app.validate.economic import EconomicValidate
 
 __author__ = '简单7月'
 
 # from flask import render_template
 
 from . import web
-
-
-@web.route('/economic/test',)
-def test():
-    pass
 
 
 @web.route('/economic', methods=['get'])
@@ -50,9 +42,3 @@ def lists():
         return jsonify(all_data)
     else:
         return jsonify({'data': [], 'code': 404, 'msg': '参数错误'})
-
-# @web.route('/cates', methods=['get'])
-# def cates():
-    # o = db.session.execute('select `name` from `economic` order by `type` asc group by `name`');
-    # data = o.fetchall()
-    # for d in data:

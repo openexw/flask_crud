@@ -22,13 +22,17 @@ class Economic(Base):
     data = relationship("EconomicData", backref=backref('economic_data', uselist=False))
 
     def to_json(self):
+
         dict = self.__dict__
         if "_sa_instance_state" in dict:
             del dict["_sa_instance_state"]
         return dict
 
+    def __getitem__(self, item):
+        return getattr(self, item)
+
     def keys(self):
-        return ['id', 'name', 'sub_name', 'city']
+        return ['id', 'name', 'sub_mame', 'city']
 
 
 class EconomicData(Base):
@@ -36,10 +40,7 @@ class EconomicData(Base):
     经济数据存储的地方
     """
     id = Column(Integer, primary_key=True)
-    total_data = Column(String(10), default='0', comment='经济值，以万亿为单位')
-    date = Column(String(20), comment='时间，用于记录第几月份')
+    data = Column(Numeric(10, 2), default=0.0, comment='经济值，以万亿为单位')
+    time = Column(Date, comment='时间，用于记录第几月份')
     is_quarter = Column(Boolean, default=0, comment='是否是季度数据，是-1，否-0')
     economic_id = Column(Integer, ForeignKey('economic.id'), comment='外键')
-
-    def keys(self):
-        return ['id', 'date', 'economic_id', 'is_quarter', 'total_data']

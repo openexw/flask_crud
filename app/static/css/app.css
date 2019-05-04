@@ -14,7 +14,6 @@ footer {
     height: 40px;
     background-color: white;
 }
-
 .container {
     height: 100%;
     align-content: center;
@@ -91,10 +90,8 @@ input:focus {
 .links a {
     margin-left: 4px;
 }
-
 /* 修改 bootstrap 默认样式 start*/
 .container-fluid {
     padding: 0;
 }
-
 /* 修改 bootstrap 默认样式 end*/

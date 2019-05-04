@@ -8,126 +8,440 @@
 <!-- css start -->
 {% block css %}
 <style>
-    body{
-        height:100% auto;
-        width:100% auto;
-    }
-    table{
-        height: 100%;
-        width: 100%;
+    div {
+    display: block;
+}
+   .eco-wrapper {
+    color: #eef9fe;
+    clear: both;
+    height: 100%;
+}
+   .eco-wrapper .map-container {
+    position: absolute;
+    left: 0;
+    top: 54px;
+    bottom: 0;
+    right: 470px;
+}
+   .side-panel {
+    position: absolute;
+    top: 54px;
+    right: 0;
+    width: 470px;
+    background: #474a4f;
+    bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+   .eco-wrapper .panel2 {
+    color: #fff;
+}
 
+   .totalTop {
+       padding-top: 20px;
+       padding-bottom: 20px;
+       background: #34363b;
+   }
+   .buttonGroupContainer {
+    margin: 0;
+}
+   .eco-wrapper .panel2 {
+    color: #fff;
+}
+
+   .button_group {
+    display: block;
+    margin: 0 auto;
+    border-radius: 4px;
+    padding: 0!important;
     }
-    #content {
-        width: 100%;
-        height: 100%;
+   .button_group {
+    text-align: center;
+    display: inline-block;
+}
+   .button_group .radio:first-child {
+    margin-left: 0;
+    border-radius: 4px 0 0 4px;
+}
+   .button_group .radio.active {
+    background: #34363b;
     }
 
-    #tab_bar {
-        width: 100%;
-        height: 20px;
-        float: left;
-    }
-    #tab_bar ul {
-        padding: 0px;
-        margin: 0px;
-        height: 20px;
-        text-align: center;
-    }
+   .button_group .radio {
+    display: inline-block;
+    border: 1px solid #7f8083;
+    background: #535559;
+    font-size: 12px;
+    color: #eef9fe!important;
+    padding: 10px 15px;
+    outline: none;
+    cursor: pointer;
+    margin: 0 0 0 -1px;
+}
+   .button_group .radio:last-child {
+    border-radius: 0 4px 4px 0;
+}
+   .button_group .radio {
+    display: inline-block;
+    border: 1px solid #7f8083;
+    background: #535559;
+    font-size: 12px;
+    color: #eef9fe!important;
+    padding: 10px 15px;
+    outline: none;
+    cursor: pointer;
+    margin: 0 0 0 -1px;
+}
 
-    #tab_bar li {
-        list-style-type: none;
-        float: left;
-        width: 50%;
-        height: 20px;
-        background-color: gray;
-    }
 
-    .tab_css {
-        width: 100%;
-        height: 600px;
-        background-color: orange;
-        display: none;
-        float: left;
-    }
 
+   .timeCurveContainer {
+    padding-top: 10px;
+    background: #34363b;
+    padding-bottom: 10px;
+   }
+   .eco-wrapper .panel2 .panel-content .listEcoContainer {
+    padding: 25px;
+    background: #474a4f;
+}
+   .eco-wrapper .panel2 .panel-content .listEcoContainer .topTitle {
+    color: #eef9fe;
+}
+   .eco-wrapper .panel2 .panel-content .listEcoContainer .topTitle .title {
+    float: left;
+    border-bottom: none;
+    height: auto;
+    margin-top: 12px;
+}
+   .eco-wrapper .panel2 .panel-content .listEcoContainer .topTitle h4 {
+    font-weight: 400;
+}
+   .eco-wrapper .title {
+    overflow: hidden;
+    height: 70px;
+    border-bottom: 1px solid #e8e8e8;
+}
+   h4 ，h6{
+    display: block;
+    margin-block-start: 1.33em;
+    margin-block-end: 1.33em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
+
+     table {
+    display: table;
+    border-collapse: separate;
+    border-spacing: 2px;
+    border-color: grey;
+}
+    .eco-wrapper .panel2 .panel-content .listEcoContainer table tr {
+    vertical-align: top;
+}
+   tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+   .eco-wrapper .panel2 .panel-content .listEcoContainer th {
+    vertical-align: middle;
+    font-weight: 400;
+}
+
+   td, th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+   .list-rank-sub, .list-rank-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+    .list-rank-icon {
+       display: inline-block;
+       background: #e75843;
+       color: #fff;
+       margin-right: 5px;
+       border-radius: 4px;
+       font-size: 12px;
+       width: 16px;
+       height: 16px;
+       line-height: 16px;
+       text-align: center;
+       box-sizing: border-box;
+   }
+    .list-rank-sub {
+    color: #999;
+    margin: 8px 0 10px;
+    height: 14px;
+}
+    .list-rank-sub, .list-rank-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
     #allmap {
         height: 100%;
     }
     .economic {
         display: none;
+        position: relative;
+        z-index: 9999;
+        background-color: #121;
+        width: 500px;
     }
     .economic span {
         cursor: pointer;
+    }
+    #main {
+        width: 500px;
+        height: 500px;
     }
 </style>
 {% endblock %}
 <!-- css end -->
 
 {% block content %}
-<table border="1" cellspacing=0 cellpadding=0>
-    <tr style="height:100%;background-color: white">
-        <td style="width:50%;color: green">
+<div class="eco-wrapper">
+    <div class="map-container">
+        <div style="height: 100%;position: relative">
             <div id="allmap"></div>
-        </td>
-        <td colspan="2" style="width: 40%">
-            <div id="content">
-                <div id="tab_bar">
-                    <ul>
-                        <li id="tab1" onclick="myclick(1)" style="background-color: orange">
-                            数据
-                        </li>
-                        <li id="tab2" onclick="myclick(2)">
-                            图表
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab_css" id="tab1_content" style="display: block">
-                    <div>
-                        <table align="center">
-                            <tr>
-                                <td>GDP</td>
-                                <td>单位：万元</td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>7826.12</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>7826.12</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>7826.12</td>
-                            </tr><tr>
-                                <td>4</td>
-                                <td>7826.12</td>
-                            </tr>
-
-                        </table>
-
-                    </div>
-                </div>
-                <div class="tab_css" id="tab2_content">
-                    <div>
-                        <div class="tab2_p" id="tab2_p">
-                            <p>图表类型：</p>
-                        </div>
-                        <div class="tab2_select">
-                             <select name="图表" id="chart">
-                                 <option value="line" >折线图</option>
-                                 <option value="bar">直方图</option>
-                                 <option value="scatter">散点图</option>
-                                 <option value="pie">饼图</option>
-                            </select>
+        </div>
+    </div>
+    <div class="side-panel">
+        <div class="panel2">
+            <div class="panel-content">
+                <div class="totolTop">
+                    <div class="buttonGroupContainer">
+                        <div class="buttonGroup" style="padding: 1px 2px;border-radius: 4px">
+                            <div class="radio active" style="color: white;">
+                                数据
+                            </div>
+                            <div class="radio" style="color:white">
+                                图表
+                            </div>
                         </div>
                     </div>
-                    <div id="main" style='width: 500px; height: 500px'></div>
                 </div>
-            </div>
-        </td>
-    </tr>
-</table>
+                <div class="ecoListContainer scroller">
+                    <div class="listEcoContainer">
+                        <div class="topTitle clearfix">
+                            <h4 class="title">成都市2014年第一产业值</h4>
+                            <div class="listEco scroller">
+                                <table style="width: 100%;border-collapse: collapse;table-layout: fixed;text-align: center">
+                                    <thead>
+                                    <tr style="border-bottom: 1px solid rgb(108,113,118);text-align: left;height:40px;
+                                    color: rgb(238,249,254);font-size: 12px">
+                                        <th style="width: 60px;"></th>
+                                        <th style="text-align: left;">时间</th>
+                                        <th style="width: 80px;text-align: center;">数据</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class=" ybp-common-table-list undefined" style="padding: 5px; border-bottom: 1px solid rgb(108, 113, 118); color: rgb(238, 249, 254); font-size: 12px;">
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">
+                                                    <span class="list-rank-icon" style="background: rgb(240, 105, 71);">
+                                                        1
+                                                    </span>
+                                                </div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <div>
+                                                <div class="list-rank-title">2014/01</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">24.3</div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class=" ybp-common-table-list undefined" style="padding: 5px; border-bottom: 1px solid rgb(108, 113, 118); color: rgb(238, 249, 254); font-size: 12px;">
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">
+                                                    <span class="list-rank-icon" style="background: rgb(240, 105, 71);">
+                                                        2
+                                                    </span>
+                                                </div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <div>
+                                                <div class="list-rank-title">2014/01</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">24.3</div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class=" ybp-common-table-list undefined" style="padding: 5px; border-bottom: 1px solid rgb(108, 113, 118); color: rgb(238, 249, 254); font-size: 12px;">
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">
+                                                    <span class="list-rank-icon" style="background: rgb(240, 105, 71);">
+                                                        3
+                                                    </span>
+                                                </div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <div>
+                                                <div class="list-rank-title">2014/01</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">24.3</div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class=" ybp-common-table-list undefined" style="padding: 5px; border-bottom: 1px solid rgb(108, 113, 118); color: rgb(238, 249, 254); font-size: 12px;">
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">
+                                                    <span class="list-rank-icon" style="background: rgb(240, 105, 71);">
+                                                        4
+                                                    </span>
+                                                </div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <div>
+                                                <div class="list-rank-title">2014/01</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">24.3</div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class=" ybp-common-table-list undefined" style="padding: 5px; border-bottom: 1px solid rgb(108, 113, 118); color: rgb(238, 249, 254); font-size: 12px;">
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">
+                                                    <span class="list-rank-icon" style="background: rgb(240, 105, 71);">
+                                                        5
+                                                    </span>
+                                                </div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <div>
+                                                <div class="list-rank-title">2014/01</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">24.3</div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class=" ybp-common-table-list undefined" style="padding: 5px; border-bottom: 1px solid rgb(108, 113, 118); color: rgb(238, 249, 254); font-size: 12px;">
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">
+                                                    <span class="list-rank-icon" style="background: rgb(240, 105, 71);">
+                                                        6
+                                                    </span>
+                                                </div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <div>
+                                                <div class="list-rank-title">2014/01</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">24.3</div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class=" ybp-common-table-list undefined" style="padding: 5px; border-bottom: 1px solid rgb(108, 113, 118); color: rgb(238, 249, 254); font-size: 12px;">
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">
+                                                    <span class="list-rank-icon" style="background: rgb(240, 105, 71);">
+                                                        7
+                                                    </span>
+                                                </div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <div>
+                                                <div class="list-rank-title">2014/01</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">24.3</div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class=" ybp-common-table-list undefined" style="padding: 5px; border-bottom: 1px solid rgb(108, 113, 118); color: rgb(238, 249, 254); font-size: 12px;">
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">
+                                                    <span class="list-rank-icon" style="background: rgb(240, 105, 71);">
+                                                        8
+                                                    </span>
+                                                </div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <div>
+                                                <div class="list-rank-title">2014/01</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="list-rank-title">24.3</div>
+                                                <div class="list-rank-sub"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chartContainer">
+                        <select id="chart">
+                             <option value="line" >折线图</option>
+                             <option value="bar">直方图</option>
+                             <option value="scatter">散点图</option>
+                             <option value="pie">饼图</option>
+                        </select>
+                        <div id="main"></div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
 <div class="economic">
     {#<span class="rml-city-btn active">GDP</span>
     <span class="rml-city-btn">第一产业</span>
@@ -148,7 +462,6 @@
 <script src="http://api.map.baidu.com/api?v=2.0&ak=in6XhrBGd3XdVIAuh4NoXP0liZi42Lum"></script>
 <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.js"></script>
 <script src="{{ url_for('static', filename='js/chats.js') }}"></script>
-
 <script type="text/javascript">
     // tab switch
     var myclick = function(v) {
@@ -171,6 +484,6 @@
             }
         }
     };
-    Cate.init();
 </script>
+
 {% endblock %}

@@ -222,8 +222,9 @@ function  getEonomicData(callback) {
     let city = $('input[name="city"]').val();
     let type = $('input[name="type"]').val();
     let sub_type = $('input[name="sub_type"]').val();
-    type = type ? 1 : type;
-    sub_type = sub_type ? 1 : sub_type;
+    console.log(city, '-----')
+    type = type=='' ? 1 : type;
+    sub_type = sub_type=='' ? 1 : sub_type;
     $.get('/economic?city='+city+'&type='+type+'&sub_type='+sub_type+'&date=2015', function (data) {
         if (data.length == 0) {
             $('#main').text('暂无数据');
@@ -234,7 +235,10 @@ function  getEonomicData(callback) {
 }
 
 
-// 分类
+/**
+ * 分类
+ * @type {{init: Cate.init, data: *[], createTheCate: Cate.createTheCate, event: Cate.event}}
+ */
 let Cate = {
     data: [
         {
@@ -319,6 +323,10 @@ let Cate = {
     }
 };
 
+/**
+ * 地图
+ * @type {{init: Map.init, selectCity: Map.selectCity, createMap: Map.createMap}}
+ */
 let Map = {
     createMap: function () {
         // map
@@ -332,9 +340,9 @@ let Map = {
             // 设置导航栏显示
             let city = e.name.substr(0, e.name.length-1)
             $('#location .text').text(city);
+            $('input[name="city"]').val(city)
             // 设置地图中心为当前城市
             map.setCenter(city);
-            $('input[name="city"]').val(city)
             map.addEventListener('click', function(){
                 $('.economic').show()
             });
@@ -364,11 +372,25 @@ let Map = {
         this.selectCity();
     }
 };
+
+let Tab = {
+    tabEvent: function () {
+        $('.buttonGroup>.radio').click(function (e) {
+            let index = $(this).index();
+            $(this).addClass('active').siblings().removeClass('active');
+            $('.ecoListContainer>div').eq(index).show().siblings().hide();
+        });
+    },
+    init: function () {
+        this.tabEvent();
+    }
+};
 $(function () {
     Map.init();
-    getEonomicData(function (data) {
-        Chat.lineChat(data);
-    });
+    Tab.init();
     Cate.init();
     Chart.init();
+    getEonomicData(function (data) {
+        Chart.lineChat(data);
+    });
 });
