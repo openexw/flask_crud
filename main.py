@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Created by ranml on 2019/1/28
 """
@@ -13,4 +14,4 @@ debug = app.config['DEBUG']
 
 # print(debug)
 if __name__ == "__main__":
-    app.run(debug=debug, host='127.0.0.1', port=8002)
+    app.run(debug=debug, host='0.0.0.0', port=8200)

@@ -2,7 +2,7 @@
 Created by 简单7月 on 2019/1/28
 """
 from flask import render_template, request, redirect, url_for, flash
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 from app.models.Base import db
 from app.models.User import User
@@ -18,7 +18,6 @@ def profile():
     """
     return render_template('auth/profile.html')
     # print(121212)
-    pass
 
 @web.route('/register', methods=['GET', 'POST'])
 def register():
@@ -58,7 +57,7 @@ def login():
         if user and user.check_password(form.password.data):
             remember = False
             print(request.form)
-            print(request.form.get('remember'))
+            # print(request.form.get('remember'))
             if request.args.get('remember'):
                 remember = True
             login_user(user, remember=remember)
@@ -71,3 +70,10 @@ def login():
         else:
             flash("账户名或密码错误", category='login_error')
     return render_template('auth/login.html', form=form)
+
+
+@web.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
+    flash('退出登录成功')
+    return redirect(url_for('web.index'))

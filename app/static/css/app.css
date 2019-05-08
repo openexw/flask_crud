@@ -95,3 +95,58 @@ input:focus {
     padding: 0;
 }
 /* 修改 bootstrap 默认样式 end*/
+.side-panel .panel2 .panel-content  .totolTop{
+    padding: 20px 0;
+    background-color: #34363b;
+}
+
+.side-panel .panel2 .panel-content .buttonGroup {
+    text-align: center;
+    font-size: 0;
+}
+.side-panel .panel2 .panel-content .buttonGroup .radio {
+    display: inline-block;
+    border: 1px solid #7f8083;
+    background: #535559;
+    font-size: 12px;
+    color: #eef9fe!important;
+    padding: 10px 15px;
+    outline: none;
+    cursor: pointer;
+    margin: 0 0 0 -1px;
+}
+.side-panel .panel2 .panel-content .buttonGroup .radio:first-child {
+    margin-left: 0;
+    border-radius: 4px 0 0 4px;
+}
+.side-panel .panel2 .panel-content .buttonGroup .radio.active{
+    background: #34363b;
+}
+.side-panel .panel2 .panel-content .buttonGroup .radio:last-child {
+    border-radius: 0 4px 4px 0;
+}
+.side-panel .panel2 .panel-content .ecoListContainer .title {
+    font-size: 18px;
+    text-align: center;
+    font-weight: 700;
+    margin: 12px 0 0 20px;
+}
+.side-panel .panel2 .panel-content  .chartContainer {
+    display: none;
+}
+#option {
+    padding: 20px;
+    box-sizing: border-box;
+}
+#option select {
+    display: inline-block;
+    padding: 5px 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}

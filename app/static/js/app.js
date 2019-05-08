@@ -193,133 +193,108 @@ let Chart = {
     event: function () {
 
         $('#chart').change(function (e) {
-            let that = this;
-            getEonomicData(function (data)  {
-                let val = $(that).val();
-                console.log(val)
-                switch (val) {
+            AjaxData.getData();
+        })
+    },
+    init: function () {
+        AjaxData.getData();
+        this.event();
+    }
+};
+
+// 数据请求完成后的操作：
+/**
+ * 1. 标题的更换
+ * 2. 数据更新（根据所在的状态 tab 更新指定的数据）
+ * 2.1 列表数据更新
+ * 2.2 图表数据（默认第一个）
+ * @param callback
+ */
+
+let AjaxData = {
+    getData: function( ) {
+        let city = $('input[name="city"]').val();
+        let year = $('#year').val();
+        let type = $('#type').val();
+        let sub_type = $('#sub_type').val();
+        let that = this;
+        $.get('/economic?city='+city+'&type='+type+'&sub_type='+sub_type+'&date='+year+'', function (data) {
+            console.log("查询条件：city:", city,'year:', year, 'type:', type, ', sub_type:', sub_type)
+            console.log("数据:", data);
+            if (data.length == 0) {
+                $('#main').text('暂无数据');
+            } else {
+                that.callback(data);
+            }
+        });
+    },
+    callback: function (data) {
+        let index = $('input[name="index"]').val();
+       // alert(index);
+        this.setTitle();
+        // console.log(index, 'index');
+        if (index == 1) {
+            // 第二部分，初始化图表
+            let chart = $('#chart').val();
+            switch (chart) {
                     case 'line':
-                        Chart.lineChat(data)
+                        Chart.lineChat(data);
                         break;
                     case 'bar':
                         Chart.bar(data);
                         break;
                     case 'pie':
-                        Chart.pieChat(data)
+                        Chart.pieChat(data);
                         break;
                     case 'scatter':
                         Chart.scatter(data);
                         break;
+                default:
+                     Chart.lineChat(data);
+                    break;
                 }
-            })
-        })
-    },
-    init: function () {
-        this.event();
-    }
-};
-function  getEonomicData(callback) {
-    let city = $('input[name="city"]').val();
-    let type = $('input[name="type"]').val();
-    let sub_type = $('input[name="sub_type"]').val();
-    console.log(city, '-----')
-    type = type=='' ? 1 : type;
-    sub_type = sub_type=='' ? 1 : sub_type;
-    $.get('/economic?city='+city+'&type='+type+'&sub_type='+sub_type+'&date=2015', function (data) {
-        if (data.length == 0) {
-            $('#main').text('暂无数据');
         } else {
-            callback(data)
+            this.createTableHeader();
+            this.setTableData(data);
         }
-    })
-}
-
-
-/**
- * 分类
- * @type {{init: Cate.init, data: *[], createTheCate: Cate.createTheCate, event: Cate.event}}
- */
-let Cate = {
-    data: [
-        {
-            'name': '地区生产总值',
-            'type': 1,
-            'child': [
-                {
-                    'sub_type': 1,
-                    'sub_name': '第一产业'
-                },
-                {
-                    'sub_type': 2,
-                    'sub_name': '第二产业'
-                },
-                {
-                    'sub_type': 3,
-                    'sub_name': '第三产业'
-                },
-            ]
-        }, {
-            'name': '社会消费品总额',
-            'type': 2,
-            'child': [
-                {
-                    'sub_type': 4,
-                    'sub_name': '城镇'
-                },
-                {
-                    'sub_type': 5,
-                    'sub_name': '农村'
-                }
-            ]
-        }, {
-            'name': '固定资产投资',
-            'type': 2,
-            'child': [
-                {
-                    'sub_type': 6,
-                    'sub_name': '第一产业投资'
-                },
-                {
-                    'sub_type': 7,
-                    'sub_name': '第二产业投资'
-                },
-                 {
-                    'sub_type': 8,
-                    'sub_name': '第三产业投资'
-                }
-            ]
-        }
-    ],
-    createTheCate: function () {
-        let cate = this.data;
-        let html = '';
-        for (let i =0; i<cate.length; i++) {
-            html += '<dl>\n' +
-                '        <dt data-type="'+cate[i]['type']+'">'+cate[i]["name"]+'</dt>\n';
-            let child = cate[i]['child'];
-            for (let j=0; j<child.length; j++) {
-                html += '<dd data-sub_type="'+child[j]['sub_type']+'">'+child[j]["sub_name"]+'</dd>\n'
-            }
-            html += '</dl>'
-        }
-        $('.economic').html(html);
     },
-    event: function () {
-        $('.economic dt').click(function (e) {
-            let type = $(this).data('type');
-            console.log(type)
-            $('input[name="type"]').val(type);
-        });
-        $('.economic dd').click(function (e) {
-
-            let type = $(this).data('sub_type');
-            console.log(type)
-            $('input[name="sub_type"]').val(type);
-        });
+    setTitle: function () {
+        let city = $('input[name="city"]').val();
+        let year = $('#year option:checked').text();
+        let type = $('#type option:checked').text();
+        let str = city+year+type;
+        $('.topTitle>h4').html(str);
     },
-    init: function () {
-        this.createTheCate();
-        this.event();
+    createTableHeader: function(){
+        $('.listEco thead').html('');
+        let h = '<tr><td>时间</td><td>金额（亿元）</td></td>';
+        $('.listEco thead').html(h);
+    },
+    setTableData: function (data) {
+        $('.listEco tbody').html('');
+        $.each(data, function (i, item) {
+            let index = i + 1;
+            let html = '<tr class=" ybp-common-table-list undefined" style="padding: 5px; border-bottom: 1px solid rgb(108, 113, 118); color: rgb(238, 249, 254); font-size: 12px; line-height: 50px">\n' +
+                '<td>' +
+                '    <div>' +
+                '        <div class="list-rank-title">' +
+                '            <span class="list-rank-icon" style="background: rgb(240, 105, 71);">' +index+'</span>' +
+                '        </div>' +
+                '        <div class="list-rank-sub"></div>' +
+                '    </div>' +
+                '</td>' +
+                '<td style="text-align: left;">' +
+                '    <div>' +
+                '        <div class="list-rank-title">'+item['date']+'</div>' +
+                '    </div>' +
+                '</td>' +
+                '<td>' +
+                '    <div>' +
+                '        <div class="list-rank-title">'+item['total_data']+'</div>' +
+                '</td>' +
+                '</tr>';
+            $('.listEco tbody').append(html)
+        });
     }
 };
 
@@ -373,24 +348,131 @@ let Map = {
     }
 };
 
+/**
+ * Tab 切换
+ * @type {{init: Tab.init, tabEvent: Tab.tabEvent}}
+ */
 let Tab = {
     tabEvent: function () {
         $('.buttonGroup>.radio').click(function (e) {
             let index = $(this).index();
+            $('input[name="index"]').val(index);
             $(this).addClass('active').siblings().removeClass('active');
             $('.ecoListContainer>div').eq(index).show().siblings().hide();
+            Select.showChartSelect();
         });
     },
     init: function () {
+        $('input[name="index"]').val(0);
         this.tabEvent();
+    }
+};
+
+let Select = {
+    data: [
+        {
+            'name': '地区生产总值',
+            'type': 1,
+            'child': [
+                {
+                    'sub_type': 1,
+                    'sub_name': '第一产业'
+                },
+                {
+                    'sub_type': 2,
+                    'sub_name': '第二产业'
+                },
+                {
+                    'sub_type': 3,
+                    'sub_name': '第三产业'
+                },
+            ]
+        }, {
+            'name': '社会消费品总额',
+            'type': 2,
+            'child': [
+                {
+                    'sub_type': 4,
+                    'sub_name': '城镇'
+                },
+                {
+                    'sub_type': 5,
+                    'sub_name': '农村'
+                }
+            ]
+        }, {
+            'name': '固定资产投资',
+            'type': 3,
+            'child': [
+                {
+                    'sub_type': 6,
+                    'sub_name': '第一产业投资'
+                },
+                {
+                    'sub_type': 7,
+                    'sub_name': '第二产业投资'
+                },
+                 {
+                    'sub_type': 8,
+                    'sub_name': '第三产业投资'
+                }
+            ]
+        }
+    ],
+    year: [
+        {'year': 2014, 'text': '2014年'},
+        {'year': 2015, 'text': '2015年'},
+    ],
+    createYearSelect: function(){
+        $.each(this.year, function (i, item) {
+           $('#year').append('<option value="'+item['year']+'" data-index="'+i+'">'+item['text']+'</option>');
+        });
+    },
+    clear: function(node){
+        return node.html('<option value="-1">请选择</option>')
+    },
+    init: function () {
+        this.createYearSelect();
+        this.event();
+    },
+    event: function () {
+        let that = this;
+        $('#year').change(function () {
+            that.clear($('#type'));
+            that.clear($('#sub_type'));
+            $.each(that.data, function (i, item) {
+                $('#type').append('<option value="'+item['type']+'" data-index="'+i+'">'+item['name']+'</option>')
+            });
+            that.showChartSelect();
+            $('#type').change(function () {
+                that.clear($('#sub_type'));
+                let index = $('#type option:selected').data('index');
+                let child = that.data[index]['child'];
+                $.each(child, function (i, item) {
+                    $('#sub_type').append('<option value="'+item['sub_type']+'">'+item['sub_name']+'</option>')
+                });
+                that.showChartSelect();
+                $('#sub_type').change(function () {
+                    that.showChartSelect();
+                    // 加载数据
+                   AjaxData.getData();
+                });
+                AjaxData.getData();
+            });
+            AjaxData.getData();
+        });
+    },
+    showChartSelect: function () {
+        let index = $('input[name="index"]').val();
+       if (index == 1) {
+           $('#chart').show();
+       }
     }
 };
 $(function () {
     Map.init();
     Tab.init();
-    Cate.init();
+    Select.init();
+    // Cate.init();
     Chart.init();
-    getEonomicData(function (data) {
-        Chart.lineChat(data);
-    });
 });

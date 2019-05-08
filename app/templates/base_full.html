@@ -50,7 +50,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="mr-auto"></div>
             <div class="my-2 mg-lg-0">
-                <a href="{{ url_for('web.login') }}" class="btn btn-primary">登录</a>
+                {% if current_user.is_authenticated %}
+                    {{ current_user.nickname }}, 欢迎你！<a href="{{ url_for('web.logout') }}" class="btn btn-primary">退出登录</a>
+                {% else %}
+                    <a href="{{ url_for('web.login') }}" class="btn btn-primary">登录</a>
+                {% endif %}
             </div>
         </div>
     </nav>

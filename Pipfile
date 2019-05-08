@@ -11,6 +11,7 @@ cymysql = "*"
 flask-login = "*"
 wtforms = "*"
 flask = "*"
+xlrd = "*"
 
 [requires]
 python_version = "3.7"
