@@ -5,6 +5,7 @@ from datetime import datetime
 
 import xlrd
 from flask import jsonify, request
+from flask_login import current_user
 from sqlalchemy import text
 from xlrd import xldate_as_tuple
 
@@ -29,11 +30,11 @@ def lists():
         sql = "SELECT ed.date, ed.total_data,ed.is_quarter FROM economic_data ed " \
               "JOIN economic e ON e.id = ed.economic_id " \
               "WHERE city=:city"
-        if form.__contains__('type') != -1:
+        if form.__contains__('type') and form['type'] != '-1':
             sql += " AND e.type=:type"
-        if form.__contains__('sub_type') != -1:
+        if form.__contains__('sub_type') and form['sub_type'] != '-1':
             sql += " AND e.sub_type=:sub_type"
-        if form.__contains__('date'):
+        if form.__contains__('date') and form['date'] != '-1':
             date = form['date'] + '%'
             sql += ' AND date LIKE "' + date + '"'
 
@@ -42,6 +43,7 @@ def lists():
             sql += " AND is_quarter=1 GROUP BY `ed`.`total_data`,ed.date"
 
         sql += ' order by date asc'
+        print(sql)
         # 执行 SQL 语句
         res = db.session.execute(text(sql),
                                  {'type': form['type'],
@@ -49,6 +51,7 @@ def lists():
         all_data = res.fetchall()
         return jsonify(all_data)
     else:
+        print('none')
         return jsonify([])
 
 
@@ -58,22 +61,25 @@ def upload_excel():
     上传 excel 文件并保存到数据库
     :return:
     """
-    file = request.files['file']
-    try:
-        r = file.read()
-        book = xlrd.open_workbook(file_contents=r)
-        names = book.sheet_names()
-        ret = []
-        for sheet in names:
-            sh = book.sheet_by_name(sheet)
-            print(sh.row_values(0))
-            print(sh.row_values(1))
-            res = insert_data_in_db(sh, sheet)
-            ret.append(res)
-        return jsonify({'code': 200, 'msg': '数据导入成功', 'data': ret})
-    except:
-        print("open excel file failed!")
-        return jsonify({'code': 400, 'msg': '数据导入失败'})
+    if current_user.is_authenticated == True:
+        file = request.files['file']
+        try:
+            r = file.read()
+            book = xlrd.open_workbook(file_contents=r)
+            names = book.sheet_names()
+            ret = []
+            for sheet in names:
+                sh = book.sheet_by_name(sheet)
+                print(sh.row_values(0))
+                print(sh.row_values(1))
+                res = insert_data_in_db(sh, sheet)
+                ret.append(res)
+            return jsonify({'code': 200, 'msg': '数据导入成功', 'data': ret})
+        except:
+            print("open excel file failed!")
+            return jsonify({'code': 400, 'msg': '数据导入失败'})
+    else:
+        return jsonify({'code': 401, 'msg': '用户没有登录'})
     # sheets = book.sheet_names()
 
 
@@ -88,7 +94,8 @@ def insert_data_in_db(sh, sheet):
                      'updated_at': getDateStr(row_data[7]), 'status': int(row_data[8])}
             list.append(value)
         elif sheet == 'economic_data':
-            value = {'id': int(row_data[0]), 'total_data': row_data[1], 'date': row_data[2], 'is_quarter': int(row_data[3]),
+            # 关于 date 的格式化
+            value = {'id': int(row_data[0]), 'total_data': row_data[1], 'date': getDateStr(row_data[2], '%Y/%m'), 'is_quarter': int(row_data[3]),
                      'economic_id': int(row_data[4]), 'status': int(row_data[5]), 'updated_at': getDateStr(row_data[6]),
                      'created_at': getDateStr(row_data[7])}
             list.append(value)
@@ -101,13 +108,14 @@ def insert_data_in_db(sh, sheet):
     return {'name': sheet, 'num_rows': row_nums}
 
 
-def getDateStr(date):
+def getDateStr(date, format='%Y/%m/%d %H:%M:%S'):
     """
     格式化日期时间
-    :param date:
+    :param date: excel时间
+    :param format: 格式化字符串
     :return:
     """
     date = datetime(*xldate_as_tuple(date, 0))
-    cell = date.strftime('%Y/%m/%d %H:%M:%S')
+    cell = date.strftime(format)
     return cell
 

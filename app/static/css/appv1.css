@@ -1,5 +1,5 @@
 /* Made with love by Mutiullah Samim*/
-@import url('https://fonts.googleapis.com/css?family=Numans');
+/*@import url('https://fonts.googleapis.com/css?family=Numans');*/
 
 html, body {
     /*background-image: url('http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg');*/
@@ -94,6 +94,49 @@ input:focus {
 .container-fluid {
     padding: 0;
 }
+.header {
+    font-size: 14px;
+}
+.header .navbar {
+    padding: 0 1rem;
+    background: #455262;
+    color: #fff;
+}
+.header .navbar-light .navbar-brand{
+    color: #fff;
+}
+.header .login-box {
+    margin-top: 0 !important;
+    line-height: 54px;
+    margin-bottom: 0;
+}
+.icon-upload{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    vertical-align: middle;
+    background: url(../images/upload-icon.png) 0 0 no-repeat;
+}
+.header .login-box .btn {
+    height: 54px;
+    margin: 0;
+    line-height: 54px;
+    padding: 0 .75rem;
+    background: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    color: #fff;
+}
+.header .login-box .btn.active {
+    background-color: #e76b53;
+    border-color: #e76b53;
+}
+.header .login-box .btn:hover {
+    background-color: #f38874;
+     border-color: #f38874;
+}
 /* 修改 bootstrap 默认样式 end*/
 .side-panel .panel2 .panel-content  .totolTop{
     padding: 20px 0;
@@ -129,7 +172,7 @@ input:focus {
     font-size: 18px;
     text-align: center;
     font-weight: 700;
-    margin: 12px 0 0 20px;
+    margin: 12px 0;
 }
 .side-panel .panel2 .panel-content  .chartContainer {
     display: none;
@@ -149,4 +192,47 @@ input:focus {
     border: 1px solid #ced4da;
     border-radius: 5px;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+/* 暂无数据 start*/
+#no-data {
+    display: none;
+    text-align: center;
+}
+#no-data .no-data-icon{
+    width: 200px;
+    height: 200px;
+    background: url(../images/nodata-icon.png) 0 0 no-repeat;
+    display: inline-block;
+    text-align: center;
+}
+#no-data p {
+    text-align: center;
+    color: #999999;
+}
+/* 暂无数据 end*/
+
+/* table start*/
+.ybp-common-table-list{
+    height: 22px;
+    line-height: 35px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5px;
+    border-bottom: 1px solid rgb(108, 113, 118);
+    color: rgb(238, 249, 254);
+    font-size: 12px;
+}
+.ybp-common-table-list:hover {
+    cursor: pointer;
+    background-color: rgb(42, 45, 48);
+}
+/* table end*/
+
+.result-info {
+
+}
+.result-info h4 {
+    font-size: 14px;
 }

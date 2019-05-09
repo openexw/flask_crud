@@ -9,9 +9,8 @@
     <!--Fontawesome CDN-->
     <link href="https://cdn.bootcss.com/font-awesome/5.3.1/css/all.min.css" rel="stylesheet">
     <!--Custom styles-->
-    <!--<link rel="stylesheet" href="{{ url_for('static', filename='css/1.css') }}">-->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/baidu-ui.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/appv1.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/baidu-uiv1.css') }}">
     {% block css %} {% endblock %}
     <style>
         
@@ -19,7 +18,7 @@
 </head>
 <body>
 
-<header class="container-fluid">
+<header class="container-fluid header">
     <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="#">区域经济数据可视化分析</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -47,13 +46,18 @@
                 <span class="rml-city-btn">绵阳</span>
             </div>
         </div>
+        <div class="my-2 mg-lg-0">
+
+        </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="mr-auto"></div>
-            <div class="my-2 mg-lg-0">
+            <div class="my-2 mg-lg-0 login-box">
                 {% if current_user.is_authenticated %}
-                    {{ current_user.nickname }}, 欢迎你！<a href="{{ url_for('web.logout') }}" class="btn btn-primary">退出登录</a>
+                    {{ current_user.nickname }}, 欢迎你！
+                    <button class="btn active" id="upload-excel" data-toggle="modal" data-target="#exampleModalCenter"><i class="icon icon-upload"></i>上传数据</button>
+                    <a href="{{ url_for('web.logout') }}" class="btn">退出登录</a>
                 {% else %}
-                    <a href="{{ url_for('web.login') }}" class="btn btn-primary">登录</a>
+                    <a href="{{ url_for('web.login') }}" class="btn active">登录</a>
                 {% endif %}
             </div>
         </div>
@@ -76,33 +80,68 @@
     </div>
     {% block content %} {% endblock %}
 </div>
-
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">上传数据</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <input type="file" name="" id="excel" class="form-control" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="update-excel">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
 <footer>
     footer
 </footer>
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+
 <script>
-    function getLocation(){
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition,showError);
-        } else {
-            $('#location .text').text('全国');
-        }
-    }
-    function showLocation(){
-        let isShow = 0;
-        $("#location>.wrapper").click(function(e) {
-            if (isShow) {
-                $('.model').hide();
-                isShow = 0;
-            } else {
-                $('.model').show();
-                isShow = 1;
+$('#exampleModalCenter').on('hide.bs.modal', function (e) {
+    document.getElementById('excel').value = '';
+});
+$('#update-excel').click(function () {
+    let excel = $('#excel').val();
+    if (!excel) {
+        layer.msg('请选择文件');
+    } else {
+        let form = new FormData();
+        form.append('file', document.getElementById('excel').files[0]);
+        $.ajax({
+            url: '/economic/excel',
+            type: "POST",
+            data: form,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data['code'] == 400) {
+                    layer.msg('数据错误，导入失败');
+                } else if (data['code'] == 200){
+                    let html = '<div class="result-info">\n' +
+                        ' <h4>上传结果：</h4>\n';
+                    let ret = data['data'];
+                    for (let i=0; i<ret.length; i++) {
+                        html += '<p>'+ret[i]['name']+'：共计 '+ret[i]['num_rows']+' 条数据</p>';
+                    }
+                    html += '</div>';
+                    $('.modal-body').append(html);
+                } else {
+                    layer.msg('亲，请登录');
+                }
             }
-        });
+        })
     }
-    showLocation();
+});
 </script>
 {% block script %} {% endblock %}
 </body>

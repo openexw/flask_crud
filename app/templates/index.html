@@ -3,8 +3,6 @@
 {% block title %}
 <title>区域经济数据分析可视化系统设计</title>
 {% endblock %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/baidu-ui.css') }}">
 <!-- css start -->
 {% block css %}
 <style>
@@ -55,7 +53,7 @@
     padding-bottom: 10px;
    }
    .eco-wrapper .panel2 .panel-content .listEcoContainer {
-        padding: 25px;
+        padding: 0 25px 25px;
         background: #474a4f;
     }
    .eco-wrapper .panel2 .panel-content .listEcoContainer .topTitle {
@@ -80,11 +78,8 @@
 
 
      table {
-    display: table;
-    border-collapse: separate;
-    border-spacing: 2px;
-    border-color: grey;
-}
+        display: table;
+    }
     .eco-wrapper .panel2 .panel-content .listEcoContainer table tr {
     vertical-align: top;
 }
@@ -114,7 +109,8 @@
        margin-right: 5px;
        border-radius: 4px;
        font-size: 12px;
-       width: 16px;
+       width: auto;
+        min-width: 16px;
        height: 16px;
        line-height: 16px;
        text-align: center;
@@ -187,43 +183,21 @@
                         <option value="line">折线图</option>
                         <option value="bar">柱状图</option>
                         <option value="pie">饼状图</option>
-                        <option value="scatter">散点图</option>
                     </select>
                 </div>
                 <div class="ecoListContainer scroller">
-                    <div class="listEcoContainer">
-                        <div class="topTitle clearfix">
-                            <h4 class="title">成都市2014年第一产业值</h4>
-                            <div class="listEco scroller">
-                                <table>
-                                    <thead>
-
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="chartContainer">
-                        <div id="main"></div>
+                    <div class="listEcoContainer"></div>
+                    <div class="chartContainer"><div id="main"></div></div>
+                    <div id="no-data">
+                        <div class="no-data-icon"></div>
+                        <p>暂无数据</p>
                     </div>
                 </div>
         </div>
     </div>
 </div>
 <div class="economic">
-    {#<span class="rml-city-btn active">GDP</span>
-    <span class="rml-city-btn">第一产业</span>
-    <span class="rml-city-btn">第二产业</span>
-    <span class="rml-city-btn">第三产业</span>
-    <span class="rml-city-btn">固定资产投资总额</span>
-    <span class="rml-city-btn">第一产业投资</span>
-    <span class="rml-city-btn">第二产业投资</span>
-    <span class="rml-city-btn">第三产业投资</span>
-    <span class="rml-city-btn">社会消费品零售总额</span>#}
 </div>
-
 <input type="hidden" name="type">
 <input type="hidden" name="sub_type">
 <input type="hidden" name="city">
@@ -232,7 +206,7 @@
 {% block script %}
 <script src="http://api.map.baidu.com/api?v=2.0&ak=in6XhrBGd3XdVIAuh4NoXP0liZi42Lum"></script>
 <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.js"></script>
-<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script src="{{ url_for('static', filename='js/appv1.js') }}"></script>
 <script type="text/javascript">
     // tab switch
     var myclick = function(v) {

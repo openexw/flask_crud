@@ -12,10 +12,39 @@ function getDate(date) {
 }
 
 /**
+ * 获取所有参数的值
+ * @returns {*}
+ */
+function getOptionStr(){
+    let city = $('input[name="city"]').val();
+    let year = $('#year option:checked').text();
+    let type = $('#type option:checked').text();
+    year = year == '请选择' ? '' : year;
+    type = type == '请选择' ? '' : type;
+    let str = city+year+type;
+    return str;
+}
+/**
  * 图表
  * @type {{init: Chart.init, bar: Chart.bar, pieChat: Chart.pieChat, getPieData: (function(*): {value: Array, x_data: Array}), getQuarterDate: (function(*): Array), scatter: Chart.scatter, event: Chart.event, lineChat: Chart.lineChat, getData: (function(*): {value: Array, x_data: Array})}}
  */
 let Chart = {
+     axisLabel: {
+      textStyle: {
+        color: '#fff'
+      }
+    },
+    axisLine: {
+      lineStyle: {
+          color: '#fff'
+      }
+    },
+     itemStyle: {
+      normal: {
+          color: '#e76b53'
+      }
+    },
+    chartColor: '#e76b53',
     getData: function(data) {
         let xData = [];
         let value = [];
@@ -24,6 +53,11 @@ let Chart = {
             value.push(data[i]['total_data'])
         }
         return {'x_data': xData, 'value': value};
+    },
+    getLegend: function(){
+        let type = $('#type option:checked').text();
+        type = type == '请选择' ? '' : type+'';
+        return  type+'亿元';
     },
     getQuarterDate: function (data) {
         let date = getDate(data['date']);
@@ -69,18 +103,26 @@ let Chart = {
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
         myChart.clear();
+        let legend = this.getLegend();
         // 指定图表的配置项和数据
         var option = {
             xAxis: {
+                name: '时间',
                 type: 'category',
+                axisLabel: this.axisLabel,
+                axisLine: this.axisLine,
                 data: res.x_data
             },
             yAxis: {
+                axisLabel: this.axisLabel,
+                axisLine: this.axisLine,
+                name: legend,
                 type: 'value'
             },
             series: [{
                 data: res.value,
                 type: 'line',
+                itemStyle: this.itemStyle,
                 smooth: true
             }]
             };
@@ -93,56 +135,32 @@ let Chart = {
         myChart.clear();
 
         let res = this.getData(data);
+        let legend = this.getLegend();
         // 指定图表的配置项和数据
         var option = {
             title: {
-                text: 'ECharts 入门示例'
+                text: getOptionStr()
             },
             tooltip: {},
             legend: {
-                data:['GDP:亿元']
+                data:[legend]
             },
             xAxis: {
+                axisLabel: this.axisLabel,
+                axisLine: this.axisLine,
                 data: res.x_data
             },
-            yAxis: {},
+            yAxis: {
+                 axisLabel: this.axisLabel,
+                axisLine: this.axisLine,
+            },
             series: [{
-                name: 'GDP:亿元',
+                name: legend,
                 type: 'bar',
+                itemStyle: this.itemStyle,
                  data: res.value
             }]
         };
-
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-    },
-    scatter: function (data) {
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
-        myChart.clear();
-
-        // 指定图表的配置项和数据
-        var option = {
-            xAxis: {},
-            yAxis: {},
-            series: [{
-                symbolSize: 20,
-                data: [
-                    [1, 8.04],
-                    [2, 6.95],
-                    [3, 7.58],
-                    [4, 8.81],
-                    [5, 8.33],
-                    [6, 9.96],
-                    [7, 7.24],
-                    [8, 4.26],
-                    [9, 10.84],
-                    [10, 4.82]
-                ],
-                type: 'scatter'
-            }]
-        };
-
 
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
@@ -213,6 +231,9 @@ let Chart = {
 
 let AjaxData = {
     getData: function( ) {
+        var index = layer.load(1, {
+          shade: [0.1,'#fff'] //0.1透明度的白色背景
+        });
         let city = $('input[name="city"]').val();
         let year = $('#year').val();
         let type = $('#type').val();
@@ -222,75 +243,86 @@ let AjaxData = {
             console.log("查询条件：city:", city,'year:', year, 'type:', type, ', sub_type:', sub_type)
             console.log("数据:", data);
             if (data.length == 0) {
-                $('#main').text('暂无数据');
+                $('#no-data').show();
             } else {
                 that.callback(data);
             }
+            layer.close(index)
         });
     },
     callback: function (data) {
-        let index = $('input[name="index"]').val();
-       // alert(index);
-        this.setTitle();
-        // console.log(index, 'index');
-        if (index == 1) {
-            // 第二部分，初始化图表
-            let chart = $('#chart').val();
-            switch (chart) {
-                    case 'line':
-                        Chart.lineChat(data);
-                        break;
-                    case 'bar':
-                        Chart.bar(data);
-                        break;
-                    case 'pie':
-                        Chart.pieChat(data);
-                        break;
-                    case 'scatter':
-                        Chart.scatter(data);
-                        break;
-                default:
-                     Chart.lineChat(data);
-                    break;
-                }
-        } else {
-            this.createTableHeader();
-            this.setTableData(data);
+        // let index = $('input[name="index"]').val();
+        let chart = $('#chart').val();
+        switch (chart) {
+            case 'line':
+                Chart.lineChat(data);
+                break;
+            case 'bar':
+                Chart.bar(data);
+                break;
+            case 'pie':
+                Chart.pieChat(data);
+                break;
+            default:
+                 Chart.lineChat(data);
+                break;
         }
+        this.createTableByData(data);
+    },
+    /**
+     * 创建表格
+     * @param data
+     */
+    createTableByData: function(data){
+        // title
+        let html = '<div class="topTitle clearfix">' +
+            '<h4 class="title"></h4>' +
+            '<div class="listEco scroller">' +
+            '<table width="100%" cellpadding="0" cellspacing="0"><thead></thead><tbody></tbody></table>' +
+            '</div>' +
+            '</div>';
+        $('.listEcoContainer').html(html);
+        $('#no-data').hide();
+        this.setTitle();
+        this.createTableHeader();
+        // create table
+        this.setTableData(data);
     },
     setTitle: function () {
         let city = $('input[name="city"]').val();
         let year = $('#year option:checked').text();
         let type = $('#type option:checked').text();
+        year = year == '请选择' ? '' : year;
+        type = type == '请选择' ? '' : type;
         let str = city+year+type;
         $('.topTitle>h4').html(str);
     },
     createTableHeader: function(){
         $('.listEco thead').html('');
-        let h = '<tr><td>时间</td><td>金额（亿元）</td></td>';
+        let h = '<tr><td width="30"></td><td width="120" style="text-align: center">时间</td><td>金额</td></td></tr>';
         $('.listEco thead').html(h);
     },
     setTableData: function (data) {
+        console.log('clear table')
         $('.listEco tbody').html('');
         $.each(data, function (i, item) {
             let index = i + 1;
-            let html = '<tr class=" ybp-common-table-list undefined" style="padding: 5px; border-bottom: 1px solid rgb(108, 113, 118); color: rgb(238, 249, 254); font-size: 12px; line-height: 50px">\n' +
-                '<td>' +
+            let html = '<tr class="ybp-common-table-list undefined">\n' +
+                '<td style="text-align: center">' +
                 '    <div>' +
                 '        <div class="list-rank-title">' +
                 '            <span class="list-rank-icon" style="background: rgb(240, 105, 71);">' +index+'</span>' +
                 '        </div>' +
-                '        <div class="list-rank-sub"></div>' +
                 '    </div>' +
                 '</td>' +
-                '<td style="text-align: left;">' +
+                '<td style="text-align: center;">' +
                 '    <div>' +
                 '        <div class="list-rank-title">'+item['date']+'</div>' +
                 '    </div>' +
                 '</td>' +
                 '<td>' +
                 '    <div>' +
-                '        <div class="list-rank-title">'+item['total_data']+'</div>' +
+                '        <div class="list-rank-title">'+item['total_data']+' 亿元</div>' +
                 '</td>' +
                 '</tr>';
             $('.listEco tbody').append(html)
@@ -339,6 +371,7 @@ let Map = {
             $('#location .model').hide();
             // 数据变化
             map.centerAndZoom(city, 15);
+            AjaxData.getData();
 
         });
     },
@@ -469,7 +502,37 @@ let Select = {
        }
     }
 };
+let Location = {
+    init: function () {
+        this.showLocation();
+    },
+    showLocation: function (){
+        $("#location>.wrapper").click(function(e) {
+            /*if (isShow) {
+                $('.model').hide();
+                isShow = 0;
+            } else {
+                $('.model').show();
+                isShow = 1;
+            }*/
+            $('.model').show();
+        });
+    }
+};
+
+let UploadExcel = {
+    init: function () {
+
+    },
+    upload: function () {
+        
+    },
+    loadModel: function () {
+
+    }
+}
 $(function () {
+    Location.init();
     Map.init();
     Tab.init();
     Select.init();

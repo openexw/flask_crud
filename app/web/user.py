@@ -19,6 +19,7 @@ def profile():
     return render_template('auth/profile.html')
     # print(121212)
 
+
 @web.route('/register', methods=['GET', 'POST'])
 def register():
     """
