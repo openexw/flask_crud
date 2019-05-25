@@ -4,7 +4,7 @@ Created by 简单7月 on 2019/1/28
 from datetime import datetime
 
 import xlrd
-from flask import jsonify, request
+from flask import jsonify, request, current_app
 from flask_login import current_user
 from sqlalchemy import text
 from xlrd import xldate_as_tuple
@@ -17,7 +17,6 @@ __author__ = '简单7月'
 # from flask import render_template
 
 from . import web
-
 
 @web.route('/economic', methods=['get'])
 def lists():
@@ -49,9 +48,12 @@ def lists():
                                  {'type': form['type'],
                                   'sub_type': form['sub_type'], 'city': form['city']})
         all_data = res.fetchall()
+
+        current_app.logger.info(all_data)
         return jsonify(all_data)
     else:
         print('none')
+        current_app.logger.error(form)
         return jsonify([])
 
 
@@ -74,12 +76,17 @@ def upload_excel():
                 print(sh.row_values(1))
                 res = insert_data_in_db(sh, sheet)
                 ret.append(res)
-            return jsonify({'code': 200, 'msg': '数据导入成功', 'data': ret})
-        except:
+            return_data = {'code': 200, 'msg': '数据导入成功', 'data': ret}
+            current_app.logger.info(return_data)
+            return jsonify(return_data)
+        except Exception as e:
+            current_app.logger.error(str(e))
             print("open excel file failed!")
             return jsonify({'code': 400, 'msg': '数据导入失败'})
     else:
-        return jsonify({'code': 401, 'msg': '用户没有登录'})
+        return_data = {'code': 401, 'msg': '用户没有登录'}
+        current_app.logger.debug(return_data)
+        return jsonify(return_data)
     # sheets = book.sheet_names()
 
 
@@ -105,7 +112,9 @@ def insert_data_in_db(sh, sheet):
         db.session.execute(EconomicData.__table__.insert(), list)
     db.session.commit()
     list.clear()
-    return {'name': sheet, 'num_rows': row_nums}
+    return_data = {'name': sheet, 'num_rows': row_nums}
+    current_app.logger.info("数据插入成功："+row_data)
+    return return_data
 
 
 def getDateStr(date, format='%Y/%m/%d %H:%M:%S'):
